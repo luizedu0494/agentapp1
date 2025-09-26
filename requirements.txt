@@ -1,8 +1,5 @@
-# requirements.txt (versão final)
+# requirements.txt (versão unificada)
 
-# Frameworks
-fastapi
-uvicorn[standard]
 streamlit
 
 # Core do Agente e LLMs
@@ -10,13 +7,7 @@ langchain
 langchain-openai
 langchain-experimental
 
-# Análise de Dados e dependências do agente
+# Análise de Dados e dependências
 pandas
 tabulate
-
-# Dependências do FastAPI para formulários e upload
-python-multipart  # <-- A dependência que faltava para o upload!
-
-# Utilitários
-python-dotenv
-requests
+python-dotenv # Útil para rodar localmente
