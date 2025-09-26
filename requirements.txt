@@ -1,8 +1,19 @@
+# requirements.txt (versão completa e corrigida)
+
+# Frameworks
 fastapi
 uvicorn[standard]
 streamlit
+
+# Core do Agente e LLMs
 langchain
 langchain-openai
+langchain-experimental  # <-- A dependência que faltava!
+
+# Análise de Dados e dependências do agente
 pandas
+tabulate  # <-- Dependência importante para o agente pandas funcionar bem
+
+# Utilitários
 python-dotenv
 requests
