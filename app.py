@@ -8,7 +8,9 @@ from dotenv import load_dotenv
 # Importações do LangChain que estavam no main.py
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentType
-from langchain_experimental.agents.pandas.dataframe.base import create_pandas_dataframe_agent
+# LINHA NOVA E CORRIGIDA
+from langchain_experimental.agents import create_pandas_dataframe_agent
+
 
 # --- Configuração da Página e Chaves de API ---
 
