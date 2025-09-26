@@ -1,33 +1,26 @@
-# app_unified.py
+# app.py (versão com pré-visualização dos dados)
 
 import os
 import streamlit as st
 import pandas as pd
 from dotenv import load_dotenv
 
-# Importações do LangChain que estavam no main.py
+# Importações do LangChain
 from langchain_openai import ChatOpenAI
 from langchain.agents import AgentType
-# LINHA NOVA E CORRIGIDA
-from langchain_experimental.agents import create_pandas_dataframe_agent
-
+from langchain_experimental.agents import create_pandas_dataframe_agent # Usando a importação simplificada
 
 # --- Configuração da Página e Chaves de API ---
 
-# Carrega as variáveis de ambiente (importante para rodar localmente)
 load_dotenv()
-
-# Pega a chave da API do DeepSeek dos "Secrets" do Streamlit Cloud
-# Use st.secrets["DEEPSEEK_API_KEY"] para o deploy
-# Use os.getenv("DEEPSEEK_API_KEY") para rodar localmente
 DEEPSEEK_API_KEY = st.secrets.get("DEEPSEEK_API_KEY", os.getenv("DEEPSEEK_API_KEY"))
 
-# --- Interface do Usuário (código do seu app.py original) ---
+# --- Interface do Usuário ---
 
 st.set_page_config(
     page_title="Agente de Análise de Dados",
     page_icon="🤖",
-    layout="centered"
+    layout="wide"  # Mudei para "wide" para dar mais espaço para as tabelas
 )
 
 st.title("🤖 Agente de Análise de Dados")
@@ -41,24 +34,55 @@ uploaded_file = st.file_uploader(
     type=["csv"]
 )
 
+# --- NOVA SEÇÃO: PRÉ-VISUALIZAÇÃO DOS DADOS ---
+# Este bloco de código será executado assim que um arquivo for carregado.
+if uploaded_file is not None:
+    try:
+        # Carrega o dataframe para a pré-visualização
+        df_preview = pd.read_csv(uploaded_file)
+        
+        st.markdown("---") # Adiciona uma linha divisória
+        st.subheader("Pré-visualização dos Dados")
+        
+        # Mostra as 5 primeiras linhas do arquivo
+        st.write("**Primeiras 5 linhas:**")
+        st.dataframe(df_preview.head())
+        
+        # Mostra informações sobre as colunas
+        st.write("**Informações das Colunas:**")
+        # Cria um dataframe com as informações para exibir de forma organizada
+        info_df = pd.DataFrame({
+            "Coluna": df_preview.columns,
+            "Tipo de Dado": df_preview.dtypes.astype(str),
+            "Valores Não Nulos": df_preview.count().values
+        })
+        st.dataframe(info_df)
+
+    except Exception as e:
+        st.error(f"Ocorreu um erro ao tentar ler o arquivo CSV: {e}")
+# -------------------------------------------------
+
+st.markdown("---")
+st.subheader("2. Faça sua Pergunta ao Agente")
+
 question = st.text_input(
-    "**2. Digite sua pergunta sobre os dados**",
-    placeholder="Ex: Quantas linhas existem? Qual a média da coluna 'Valor'?"
+    "Digite sua pergunta sobre os dados:",
+    placeholder="Ex: Qual a correlação entre a coluna 'Time' e 'Amount'?"
 )
 
-# --- Lógica do Backend (código do seu main.py adaptado) ---
+# --- Lógica do Agente (permanece a mesma) ---
 
 if st.button("Analisar Dados", type="primary"):
     if uploaded_file is not None and question:
         if not DEEPSEEK_API_KEY:
-            st.error("Chave da API do DeepSeek não encontrada! Configure os Secrets no Streamlit Cloud.")
+            st.error("Chave da API não encontrada! Configure os Secrets no Streamlit Cloud.")
         else:
             with st.spinner("O agente está analisando os dados... Isso pode levar um momento. 🧠"):
                 try:
-                    # Carrega o CSV em um dataframe do Pandas
+                    # O arquivo precisa ser "rebobinado" para ser lido novamente pelo agente
+                    uploaded_file.seek(0)
                     df = pd.read_csv(uploaded_file)
 
-                    # Inicializa o LLM (usando DeepSeek)
                     llm = ChatOpenAI(
                         model="deepseek-chat", 
                         temperature=0,
@@ -66,7 +90,6 @@ if st.button("Analisar Dados", type="primary"):
                         base_url="https://api.deepseek.com/v1" 
                      )
 
-                    # Cria o Agente Pandas DataFrame do LangChain
                     agent = create_pandas_dataframe_agent(
                         llm=llm,
                         df=df,
@@ -76,7 +99,6 @@ if st.button("Analisar Dados", type="primary"):
                         allow_dangerous_code=True
                     )
 
-                    # Cria um prompt detalhado para guiar o agente
                     prompt = f"""
                     Sua tarefa é atuar como um analista de dados.
                     Use o dataframe fornecido para responder à seguinte pergunta: '{question}'.
@@ -84,11 +106,8 @@ if st.button("Analisar Dados", type="primary"):
                     Forneça uma conclusão clara, concisa e em português.
                     """
                     
-                    # Executa o agente com o prompt
-                    # Usamos agent.invoke() em vez de ainvoike() pois o Streamlit não lida bem com async aqui
                     response = agent.invoke(prompt)
                     
-                    # Exibe a resposta final do agente
                     st.success("Análise Concluída!")
                     st.markdown("### Resposta do Agente:")
                     st.write(response["output"])
@@ -97,4 +116,3 @@ if st.button("Analisar Dados", type="primary"):
                     st.error(f"Ocorreu um erro durante a análise: {e}")
     else:
         st.warning("Por favor, faça o upload de um arquivo CSV e digite uma pergunta antes de analisar.")
-
