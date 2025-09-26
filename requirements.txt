@@ -1,4 +1,4 @@
-# requirements.txt (versão completa e corrigida)
+# requirements.txt (versão final)
 
 # Frameworks
 fastapi
@@ -8,11 +8,14 @@ streamlit
 # Core do Agente e LLMs
 langchain
 langchain-openai
-langchain-experimental  # <-- A dependência que faltava!
+langchain-experimental
 
 # Análise de Dados e dependências do agente
 pandas
-tabulate  # <-- Dependência importante para o agente pandas funcionar bem
+tabulate
+
+# Dependências do FastAPI para formulários e upload
+python-multipart  # <-- A dependência que faltava para o upload!
 
 # Utilitários
 python-dotenv
