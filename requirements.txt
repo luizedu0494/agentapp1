@@ -8,3 +8,4 @@ tabulate
 python-dotenv
 SQLAlchemy
 openpyxl
+langchain-google-genai
