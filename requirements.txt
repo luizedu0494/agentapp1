@@ -1,10 +1,12 @@
 streamlit
-langchain
-langchain-openai # Pode ser mantido, pois algumas partes do LangChain ainda podem depender dele
-langchain-experimental
 pandas
-tabulate
 python-dotenv
-SQLAlchemy
 openpyxl
-langchain-google-genai # NOVO
+tabulate
+SQLAlchemy
+langchain
+langchain-core  # Adicionar para garantir compatibilidade
+langchain-community # <-- ADICIONAR ESTA LINHA
+langchain-experimental
+langchain-google-genai
+langchain-openai
