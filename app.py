@@ -12,7 +12,7 @@ from dotenv import load_dotenv
 from langchain_google_genai import ChatGoogleGenerativeAI
 from langchain.agents.agent_types import AgentType
 from langchain_agents import create_pandas_dataframe_agent
-
+# Importações específicas do LangChain
 
 
 # --- 2. Configuração da Página e Chaves de API ---
