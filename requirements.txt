@@ -1,13 +1,13 @@
+# Framework do App
 streamlit
+
+# Manipulação de Dados
 pandas
-python-dotenv
 openpyxl
-tabulate
-SQLAlchemy
-langchain
-langchain-core  # Adicionar para garantir compatibilidade
-langchain-community # <-- ADICIONAR ESTA LINHA
-langchain-experimental
+
+# Chaves de API (se você usa .env localmente)
+python-dotenv
+
+# Pacotes LangChain (a forma correta)
 langchain-google-genai
-langchain-openai
-langchain-agents # <-- Adicione este pacote
+langchain-agents
