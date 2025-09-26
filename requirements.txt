@@ -1,11 +1,10 @@
-# requirements.txt (Versão Final e Robusta)
 streamlit
 langchain
-langchain-openai
+langchain-openai # Pode ser mantido, pois algumas partes do LangChain ainda podem depender dele
 langchain-experimental
 pandas
 tabulate
 python-dotenv
 SQLAlchemy
 openpyxl
-langchain-google-genai
+langchain-google-genai # NOVO
