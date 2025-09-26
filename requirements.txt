@@ -10,3 +10,4 @@ langchain-community # <-- ADICIONAR ESTA LINHA
 langchain-experimental
 langchain-google-genai
 langchain-openai
+langchain-agents # <-- Adicione este pacote
