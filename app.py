@@ -73,6 +73,7 @@ if st.button("Analisar Dados", type="primary"):
                         verbose=True,
                         agent_type=AgentType.OPENAI_FUNCTIONS,
                         handle_parsing_errors=True,
+                        allow_dangerous_code=True
                     )
 
                     # Cria um prompt detalhado para guiar o agente
